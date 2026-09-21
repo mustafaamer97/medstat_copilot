@@ -1,9 +1,15 @@
+import pandas as pd
 import streamlit as st
 
 from core.data_loader import load_file
 from core.profiler import profile_dataset
 from core.normality import check_normality
 from core.table1 import generate_table1
+from core.effect_sizes import (
+    mean_difference,
+    risk_ratio,
+    odds_ratio
+)
 
 
 st.set_page_config(
@@ -116,3 +122,49 @@ if uploaded_file:
             st.write(
                 f"P-value: {result['p_value']:.4f}"
             )
+
+            if result["test"] in [
+                "Independent T-Test",
+                "Mann-Whitney U"
+            ]:
+
+                groups = df[group_variable].dropna().unique()
+
+                group1 = df[
+                    df[group_variable] == groups[0]
+                ][outcome_variable].dropna()
+
+                group2 = df[
+                    df[group_variable] == groups[1]
+                ][outcome_variable].dropna()
+
+                md = mean_difference(group1, group2)
+
+                st.write(
+                    f"Mean Difference: {md:.4f}"
+                )
+
+            elif result["test"] in [
+                "Fisher Exact Test",
+                "Chi-Square Test"
+            ]:
+
+                table = pd.crosstab(
+                    df[group_variable],
+                    df[outcome_variable]
+                )
+
+                if table.shape == (2, 2):
+
+                    or_value = odds_ratio(table)
+                    rr_value = risk_ratio(table)
+
+                    if or_value is not None:
+                        st.write(
+                            f"Odds Ratio: {or_value:.4f}"
+                        )
+
+                    if rr_value is not None:
+                        st.write(
+                            f"Risk Ratio: {rr_value:.4f}"
+                        )
