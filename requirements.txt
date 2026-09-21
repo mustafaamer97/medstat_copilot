@@ -1,0 +1,10 @@
+streamlit
+pandas
+numpy
+scipy
+tableone
+statsmodels
+pingouin
+lifelines
+python-docx
+openpyxl
