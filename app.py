@@ -59,3 +59,60 @@ if uploaded_file:
             st.write(
                 f"{column}: p = {result['p_value']:.4f}"
             )
+
+    # ------------------ Statistical Analysis ------------------
+    st.subheader("Statistical Analysis")
+
+    columns = df.columns.tolist()
+
+    outcome_variable = st.selectbox(
+        "Outcome Variable",
+        columns
+    )
+
+    group_variable = st.selectbox(
+        "Group Variable",
+        columns
+    )
+
+    if st.button("Run Analysis"):
+
+        from core.statistical_tests import (
+            run_numeric_test,
+            run_categorical_test
+        )
+
+        if df[outcome_variable].dtype in [
+            "int64",
+            "float64"
+        ]:
+
+            result = run_numeric_test(
+                df,
+                outcome_variable,
+                group_variable
+            )
+
+        else:
+
+            result = run_categorical_test(
+                df,
+                outcome_variable,
+                group_variable
+            )
+
+        if result:
+
+            st.success("Analysis Completed")
+
+            st.write(
+                f"Test: {result['test']}"
+            )
+
+            st.write(
+                f"Statistic: {result['statistic']:.4f}"
+            )
+
+            st.write(
+                f"P-value: {result['p_value']:.4f}"
+            )
