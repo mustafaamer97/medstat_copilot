@@ -11,6 +11,7 @@ from core.effect_sizes import (
     odds_ratio
 )
 from core.results_generator import generate_results_text
+from core.statistical_methods import get_statistical_method
 from core.word_exporter import create_word_report
 
 
@@ -177,12 +178,21 @@ if uploaded_file:
 
             st.write(results_text)
 
+            statistical_methods = get_statistical_method(
+                result["test"]
+            )
+
+            st.subheader("Statistical Methods")
+
+            st.write(statistical_methods)
+
             st.subheader("Export")
 
             document = create_word_report(
                 uploaded_file.name,
                 table1,
-                results_text
+                results_text,
+                statistical_methods
             )
 
             document.save("medstat_report.docx")
