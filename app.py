@@ -11,6 +11,7 @@ from core.effect_sizes import (
     odds_ratio
 )
 from core.results_generator import generate_results_text
+from core.word_exporter import create_word_report
 
 
 st.set_page_config(
@@ -175,3 +176,22 @@ if uploaded_file:
             results_text = generate_results_text(result)
 
             st.write(results_text)
+
+            st.subheader("Export")
+
+            document = create_word_report(
+                uploaded_file.name,
+                table1,
+                results_text
+            )
+
+            document.save("medstat_report.docx")
+
+            with open("medstat_report.docx", "rb") as file:
+
+                st.download_button(
+                    label="Download Word Report",
+                    data=file,
+                    file_name="medstat_report.docx",
+                    mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                )
