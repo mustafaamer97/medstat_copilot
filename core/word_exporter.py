@@ -4,7 +4,8 @@ from docx import Document
 def create_word_report(
     dataset_name,
     table1,
-    results_text
+    results_text,
+    statistical_methods
 ):
 
     document = Document()
@@ -16,6 +17,15 @@ def create_word_report(
 
     document.add_paragraph(
         f"Dataset: {dataset_name}"
+    )
+
+    document.add_heading(
+        "Statistical Methods",
+        level=2
+    )
+
+    document.add_paragraph(
+        statistical_methods
     )
 
     document.add_heading(
@@ -45,6 +55,8 @@ def create_word_report(
         level=2
     )
 
-    document.add_paragraph(results_text)
+    document.add_paragraph(
+        results_text
+    )
 
     return document
