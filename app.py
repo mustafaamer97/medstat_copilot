@@ -10,6 +10,7 @@ from core.effect_sizes import (
     risk_ratio,
     odds_ratio
 )
+from core.results_generator import generate_results_text
 
 
 st.set_page_config(
@@ -168,3 +169,9 @@ if uploaded_file:
                         st.write(
                             f"Risk Ratio: {rr_value:.4f}"
                         )
+
+            st.subheader("Results")
+
+            results_text = generate_results_text(result)
+
+            st.write(results_text)
