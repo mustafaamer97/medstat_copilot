@@ -3,3 +3,4 @@ pandas
 scipy
 tableone
 openpyxl
+python-docx
